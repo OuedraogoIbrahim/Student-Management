@@ -1,4 +1,4 @@
-package Ecole;
+package Management;
 
 public class Actions {
 

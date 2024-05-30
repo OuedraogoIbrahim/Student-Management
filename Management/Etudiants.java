@@ -1,4 +1,4 @@
-package Ecole;
+package Management;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,27 +13,33 @@ public class Etudiants {
     protected int age;
 
     protected static HashMap<String, Double> notes = new HashMap<>();
+
+    protected HashMap<String, Double> studentNots = new HashMap<>();
+
     protected static ArrayList<Etudiants> etudiants = new ArrayList<Etudiants>();
 
-    public Etudiants(String nom, String prenom, int age) {
+    public Etudiants() {
+    }
 
-        this.id = etudiants.isEmpty() ? 1 : etudiants.size() + 1;
+    public Etudiants(int id, String nom, String prenom, int age) {
+        this.id = id;
         this.lastName = nom;
         this.firstName = prenom;
         this.age = age;
-        etudiants.add(this);
-        System.out.println("Nouvel etudiant ajoute ****");
     }
 
-    public static void EtudiantsList() {
+    public void addStudent(Etudiants etudiant) {
 
-        if (etudiants.isEmpty()) {
-            System.out.println("Aucun etudiant");
-        }
-        for (Etudiants etudiant : etudiants) {
-            System.out.println(
-                    "Etudiant " + etudiant.id + "*** Nom : " + etudiant.lastName + "*** Prenom : "
-                            + etudiant.firstName);
+        Etudiants.etudiants.add(etudiant);
+        System.out.println("Etudiant ajoute avec succes");
+
+    }
+
+    public static void deleteStudent(int id) {
+        for (Etudiants etudiant : Etudiants.etudiants) {
+            if (etudiant.getId() == id) {
+                Etudiants.etudiants.remove(id);
+            }
         }
     }
 
@@ -64,7 +70,7 @@ public class Etudiants {
                         System.out.println("Entrez un nombre entre 0 et 20");
                     }
 
-                    this.notes.put(matiere, note);
+                    this.studentNots.put(matiere, note);
                 }
             }
         }
@@ -74,14 +80,34 @@ public class Etudiants {
     }
 
     public void viewEtudiantNotes() {
-        if (this.notes.isEmpty()) {
+        if (this.studentNots.isEmpty()) {
             System.out.println("Aucune note pour cet etudiant");
         } else {
 
-            for (Map.Entry<String, Double> entry : this.notes.entrySet()) {
+            for (Map.Entry<String, Double> entry : this.studentNots.entrySet()) {
                 System.out.println(entry.getKey() + " : " + entry.getValue());
             }
         }
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public String getFirstName() {
+        return this.firstName;
+    }
+
+    public String getLastName() {
+        return this.lastName;
+    }
+
+    public int getAge() {
+        return this.age;
+    }
+
+    public static ArrayList<Etudiants> getEtudiantsList() {
+        return Etudiants.etudiants;
     }
 
 }
