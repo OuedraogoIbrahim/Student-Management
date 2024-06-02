@@ -3,6 +3,7 @@ import java.util.Scanner;
 
 import Management.Actions;
 import Management.Etudiants;
+import Management.Notes;
 import Management.StudentVerification;
 
 public class Main extends Thread {
@@ -11,6 +12,9 @@ public class Main extends Thread {
 
         System.out.println("Actions disponibles : ");
         Scanner sc = new Scanner(System.in);
+        int id; // Identifiant de l'etudiant
+        StringBuilder sb = new StringBuilder();
+        // sb.
 
         while (true) {
             Actions.actions();
@@ -51,32 +55,67 @@ public class Main extends Thread {
                         etudiant.addStudent(etudiant);
 
                     } else {
-                        int lastIndex = etudiantsList.size();
+                        Etudiants lastEtudiant = etudiantsList.getLast();
+                        int lastIndex = lastEtudiant.getId();
                         Etudiants etudiant = new Etudiants(lastIndex + 1, nom, prenom, age);
                         etudiant.addStudent(etudiant);
                     }
+                    System.out.println("Etudiant ajoute avec succes");
                     System.out.println();
                     break;
 
                 case "3":
-                    System.out.print("Identifiant de l'etudiant : ");
-                    while (!sc.hasNextInt()) {
-                        System.out.print("    Erreur. Entrez un entier : ");
-                        sc.nextLine();
-                    }
-                    int id = sc.nextInt();
-                    sc.nextLine();
-                    if (id <= 0 || id > etudiantsList.size()) {
-                        System.out.println("  **** Aucun etudiant correspondant ***");
+                    id = StudentVerification.idVerification();
+                    String statusForDelete = StudentVerification.StudentExist(id);
+                    if (statusForDelete != null) {
+                        System.out.println(statusForDelete);
                         break;
                     }
+
                     Etudiants.deleteStudent(id);
                     System.out.println("   *** suppression reussie ***");
                     break;
 
                 case "4":
-                    System.out.println(3);
+                    id = StudentVerification.idVerification();
+                    String statusForAdd = StudentVerification.StudentExist(id);
+                    if (statusForAdd != null) {
+                        System.out.println(statusForAdd);
+                        break;
+                    }
 
+                    System.out.print("Entrez la matiere : ");
+                    while (sc.hasNextInt()) {
+                        System.out.print("Incorrect. Saisissez a nouveau : ");
+                        sc.nextLine();
+                    }
+                    String matiere = sc.nextLine();
+
+                    System.out.print("Entrez la note : ");
+                    while (!sc.hasNextInt()) {
+                        System.out.print("Incorrect. Saisissez a nouveau : ");
+                        sc.nextLine();
+                    }
+
+                    int studentNot = sc.nextInt();
+                    sc.nextLine();
+
+                    Notes note = new Notes(matiere, studentNot);
+                    Etudiants.addNotes(note, id);
+                    System.out.println(" *** Note ajoute avec succes ***");
+                    System.out.println();
+                    break;
+
+                case "5":
+                    id = StudentVerification.idVerification();
+                    String statusForNote = StudentVerification.StudentExist(id);
+                    if (statusForNote != null) {
+                        System.out.println(statusForNote);
+                        break;
+                    }
+
+                    Etudiants.viewEtudiantNotes(id);
+                    System.out.println();
                     break;
 
                 default:
